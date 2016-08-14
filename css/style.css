@@ -1,0 +1,25 @@
+body {
+	margin: 0px;
+}
+
+#container {
+	background-color: #000;
+	overflow: hidden;
+	margin: 0px;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+#title {
+	font-family: 'Bungee Shade', monospace;
+	color: #b5faf6;
+	font-size: 2.3em;
+}
+
+#result {
+	font-family: 'Bungee Shade', monospace;
+	color: #b5faf6;
+	font-size: 4em;
+	text-decoration: blink;
+}
+
