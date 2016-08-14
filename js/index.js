@@ -81,13 +81,35 @@ light.position.set(100, 0, -60);
 scene.add(light);
 
 		//stars
-//scene.add(stars);
+scene.add(stars);
 
 //scene.add(anon.mesh);
 scene.add(mercury.mesh);
+scene.add(venus.mesh);
+venus.mesh.position.x = 15;
+venus.mesh.position.y = 10;
+scene.add(earth.mesh[0], earth.mesh[1]);
+earth.mesh[0].position.x = -15;
+earth.mesh[1].position.x = -15;
+
+function animate() {
+	  //animation
+	 requestAnimationFrame(animate);
+	  mercury.mesh.rotation.y += 0.003;
+	  mercury.mesh.rotation.x += 0.002;
+	  venus.mesh.rotation.y += 0.003;
+	  venus.mesh.rotation.x += 0.004;
+	  earth.mesh[1].rotation.y += 0.001;
+	  earth.mesh[0].rotation.x += 0.002;
+	  earth.mesh[1].rotation.x += 0.005;
+	  stars.rotation.y += 0.00005;
+	  //stars.rotation.x += 0.0008;
+	  renderer.render(scene, camera);
+	}
 
 //Controller
 function setup() {
+	animate();
 	renderer.render(scene, camera);
 }
 

@@ -13,9 +13,10 @@ body {
 #title {
 	font-family: 'Bungee Shade', monospace;
 	color: #b5faf6;
-	font-size: 2.3em;
+	font-size: 2.5em;
 	position: absolute;
-	left: 33%;
+	left: 32%;
+	margin-top: 4%;
 }
 
 #result {

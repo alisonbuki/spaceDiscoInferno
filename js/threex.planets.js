@@ -19,7 +19,7 @@ THREEx.Planets.createSun	= function(){
 }
 
 THREEx.Planets.createMercury	= function(){
-	var geometry	= new THREE.SphereGeometry(10, 32, 32)
+	var geometry	= new THREE.SphereGeometry(5, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
 		map	: THREE.ImageUtils.loadTexture(THREEx.Planets.baseURL+'images/mercurymap.jpg'),
 		bumpMap	: THREE.ImageUtils.loadTexture(THREEx.Planets.baseURL+'images/mercurybump.jpg'),
@@ -30,7 +30,7 @@ THREEx.Planets.createMercury	= function(){
 }
 
 THREEx.Planets.createVenus	= function(){
-	var geometry	= new THREE.SphereGeometry(0.5, 32, 32)
+	var geometry	= new THREE.SphereGeometry(5, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
 		map	: THREE.ImageUtils.loadTexture(THREEx.Planets.baseURL+'images/venusmap.jpg'),
 		bumpMap	: THREE.ImageUtils.loadTexture(THREEx.Planets.baseURL+'images/venusbump.jpg'),
@@ -41,7 +41,7 @@ THREEx.Planets.createVenus	= function(){
 }
 
 THREEx.Planets.createEarth	= function(){
-	var geometry	= new THREE.SphereGeometry(0.5, 32, 32)
+	var geometry	= new THREE.SphereGeometry(5, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
 		map		: THREE.ImageUtils.loadTexture(THREEx.Planets.baseURL+'images/earthmap1k.jpg'),
 		bumpMap		: THREE.ImageUtils.loadTexture(THREEx.Planets.baseURL+'images/earthbump1k.jpg'),
@@ -102,7 +102,7 @@ THREEx.Planets.createEarthCloud	= function(){
 	}, false);
 	imageMap.src	= THREEx.Planets.baseURL+'images/earthcloudmap.jpg';
 
-	var geometry	= new THREE.SphereGeometry(0.51, 32, 32)
+	var geometry	= new THREE.SphereGeometry(5.1, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
 		map		: new THREE.Texture(canvasResult),
 		side		: THREE.DoubleSide,
@@ -332,7 +332,8 @@ THREEx.Planets.createStarfield	= function(){
 	loader.load(THREEx.Planets.baseURL+'images/galaxy_starfield.png', function(texture){
 		mesh.material = new THREE.MeshLambertMaterial( {
 			map: texture,
-			side: THREE.BackSide
+			side: THREE.BackSide,
+			opacity: 0.5
 		 });
 		
 	});
@@ -341,9 +342,31 @@ THREEx.Planets.createStarfield	= function(){
 	// 	map	: texture,
 	// 	side	: THREE.BackSide
 	// })
-	var geometry	= new THREE.SphereGeometry(10, 32, 32);
+	var geometry	= new THREE.SphereGeometry(150, 32, 32);
 	mesh	= new THREE.Mesh(geometry, material);
 	return mesh;	
+}
+
+THREEx.Planets.createStars = function() {
+  var starAmt = 20000;
+  var starGeo = new THREE.SphereGeometry(1000, 100, 50);
+  var starAmt = 10000;
+  var starMat = {
+    size: 1.0,
+    opacity: 0.7
+  };
+  var starMesh = new THREE.PointsMaterial(starMat);
+
+  for (var i = 0; i < starAmt; i++) {
+    var starVertex = new THREE.Vector3();
+    starVertex.x = Math.random() * 1000 - 500;
+    starVertex.y = Math.random() * 1000 - 500;
+    starVertex.z = Math.random() * 1000 - 500;
+    starGeo.vertices.push(starVertex);
+  }
+
+  stars = new THREE.Points(starGeo, starMesh);
+  return stars;
 }
 
 THREEx.Planets.createAnonPlanet = function(){
