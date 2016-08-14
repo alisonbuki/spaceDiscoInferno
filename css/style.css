@@ -14,6 +14,8 @@ body {
 	font-family: 'Bungee Shade', monospace;
 	color: #b5faf6;
 	font-size: 2.3em;
+	position: absolute;
+	left: 33%;
 }
 
 #result {

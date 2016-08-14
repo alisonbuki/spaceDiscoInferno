@@ -7,8 +7,8 @@ function Planet(name, mesh) {
 
 
 //Planets data
-var anon = new Planet('?', THREEx.Planets.createAnonPlanet);
-var sun = new Planet('Sun', THREEx.Planets.createSun);
+var anon = new Planet('?', THREEx.Planets.createAnonPlanet());
+var sun = new Planet('Sun', THREEx.Planets.createSun());
 var mercury = new Planet('Mercury', THREEx.Planets.createMercury());
 var venus = new Planet('Venus', THREEx.Planets.createVenus());
 var earth = new Planet('Earth', [THREEx.Planets.createEarth(), THREEx.Planets.createEarthCloud()]);
@@ -69,7 +69,7 @@ scene.fog = new THREE.FogExp2(0x000000, .0007);
 		//camera
 var camera = new THREE.PerspectiveCamera(45, width/height, .1, 10000);
 scene.add(camera);
-camera.position.set(0, 90, -290);
+camera.position.set(0, 90, 0);
 camera.lookAt(scene.position);
 
 		//lights
@@ -81,7 +81,10 @@ light.position.set(100, 0, -60);
 scene.add(light);
 
 		//stars
-scene.add(stars);
+//scene.add(stars);
+
+//scene.add(anon.mesh);
+scene.add(mercury.mesh);
 
 //Controller
 function setup() {

@@ -19,7 +19,7 @@ THREEx.Planets.createSun	= function(){
 }
 
 THREEx.Planets.createMercury	= function(){
-	var geometry	= new THREE.SphereGeometry(0.5, 32, 32)
+	var geometry	= new THREE.SphereGeometry(10, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
 		map	: THREE.ImageUtils.loadTexture(THREEx.Planets.baseURL+'images/mercurymap.jpg'),
 		bumpMap	: THREE.ImageUtils.loadTexture(THREEx.Planets.baseURL+'images/mercurybump.jpg'),
@@ -329,7 +329,7 @@ THREEx.Planets.createStarfield	= function(){
 	var mesh;
 	var material;
 	var loader = new THREE.TextureLoader();
-	loader.load('images/galaxy_starfield.png', function(texture){
+	loader.load(THREEx.Planets.baseURL+'images/galaxy_starfield.png', function(texture){
 		mesh.material = new THREE.MeshLambertMaterial( {
 			map: texture,
 			side: THREE.BackSide
@@ -341,13 +341,13 @@ THREEx.Planets.createStarfield	= function(){
 	// 	map	: texture,
 	// 	side	: THREE.BackSide
 	// })
-	var geometry	= new THREE.SphereGeometry(1000, 32, 32);
+	var geometry	= new THREE.SphereGeometry(10, 32, 32);
 	mesh	= new THREE.Mesh(geometry, material);
 	return mesh;	
 }
 
 THREEx.Planets.createAnonPlanet = function(){
-	var geometry = new THREE.IcosahedronGeometry(0.5, 1);
+	var geometry = new THREE.IcosahedronGeometry(10, 1);
 	var material = new THREE.MeshNormalMaterial();
 	var mesh = new THREE.Mesh(geometry, material);
 	return mesh;
