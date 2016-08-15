@@ -347,31 +347,35 @@ THREEx.Planets.createStarfield	= function(){
 	return mesh;	
 }
 
-THREEx.Planets.createStars = function() {
-  var starAmt = 20000;
-  var starGeo = new THREE.SphereGeometry(1000, 100, 50);
-  var starAmt = 10000;
-  var starMat = {
-    size: 1.0,
-    opacity: 0.7
-  };
-  var starMesh = new THREE.PointsMaterial(starMat);
+// THREEx.Planets.createStars = function() {
+//   var starAmt = 20000;
+//   var starGeo = new THREE.SphereGeometry(1000, 100, 50);
+//   var starAmt = 10000;
+//   var starMat = {
+//     size: 1.0,
+//     opacity: 0.7
+//   };
+//   var starMesh = new THREE.PointsMaterial(starMat);
 
-  for (var i = 0; i < starAmt; i++) {
-    var starVertex = new THREE.Vector3();
-    starVertex.x = Math.random() * 1000 - 500;
-    starVertex.y = Math.random() * 1000 - 500;
-    starVertex.z = Math.random() * 1000 - 500;
-    starGeo.vertices.push(starVertex);
-  }
+//   for (var i = 0; i < starAmt; i++) {
+//     var starVertex = new THREE.Vector3();
+//     starVertex.x = Math.random() * 1000 - 500;
+//     starVertex.y = Math.random() * 1000 - 500;
+//     starVertex.z = Math.random() * 1000 - 500;
+//     starGeo.vertices.push(starVertex);
+//   }
 
-  stars = new THREE.Points(starGeo, starMesh);
-  return stars;
-}
+//   stars = new THREE.Points(starGeo, starMesh);
+//   return stars;
+// }
 
 THREEx.Planets.createAnonPlanet = function(){
-	var geometry = new THREE.IcosahedronGeometry(10, 1);
-	var material = new THREE.MeshNormalMaterial();
+	var geometry = new THREE.IcosahedronGeometry(6, 1);
+	var material = new THREE.MeshNormalMaterial({shading: 
+		THREE.FlatShading, 
+		polygonOffset:true, 
+		polygonOffsetFactor:1,
+		polygonOffsetUnits: 1});
 	var mesh = new THREE.Mesh(geometry, material);
 	return mesh;
 }

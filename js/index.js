@@ -126,6 +126,13 @@ scene.add(pluto.mesh);
 pluto.mesh.position.z = 15;
 pluto.mesh.position.x = 3;
 
+scene.add(anon.mesh);
+anon.mesh.position.z = -15;
+anon.mesh.position.y = 10;
+
+var helper = new THREE.EdgesHelper(anon.mesh, 0x000011);
+scene.add(helper);
+
 function animate() {
 	  //animation
 	 requestAnimationFrame(animate);
@@ -148,6 +155,8 @@ function animate() {
 	  neptune.mesh.rotation.x += 0.005;
 	  pluto.mesh.rotation.y += 0.001;
 	  pluto.mesh.rotation.x += 0.004;
+	  anon.mesh.rotation.y += 0.004;
+	  anon.mesh.rotation.x += 0.003;
 
 	  stars.rotation.y += 0.00005;
 	  //stars.rotation.x += 0.0008;
