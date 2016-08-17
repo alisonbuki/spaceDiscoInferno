@@ -55,20 +55,24 @@ Game.prototype.positionPlanets = function() {
 
 Game.prototype.drawAnons = function() {
 	var group = new THREE.Group();
-	var positionX = -30;
-	var positionZ = -15;
+	var x = -45;
+	var z = -33;
 	for (i=0; i<4; i++) {
-		positionZ += (i*15);
+		x = -45;
+		z += 15;
 		for (j=0; j<5; j++) {
-			positionX += (j*15);
+			x += 15;
 			var anonPlanet = THREEx.Planets.createAnonPlanet();
-			anonPlanet.position.x = positionX;
-			anonPlanet.position.z = positionZ;
+			anonPlanet.position.x = x;
+			anonPlanet.position.z = z;
 			group.add(anonPlanet);
+			console.log(x, z);
 			var helper = new THREE.EdgesHelper(anonPlanet, 0x000011);
 			group.add(helper);
 		}
 	}
+	group.position.x = 0;
+	group.position.z = 0;
 	scene.add(group);
 }
 
