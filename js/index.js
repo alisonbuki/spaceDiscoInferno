@@ -25,12 +25,12 @@ var thePlanets = [mercury, venus, earth, moon, mars, jupiter, saturn, uranus, ne
 //Starfield
 var stars = THREEx.Planets.createStarfield();
 
-//Matrix
-function Matrix() {
+//Board
+function boardKey() {
 	this.planets = $.merge(thePlanets, thePlanets);
 }
 
-Matrix.prototype.shuffle = function() {
+boardKey.prototype.shuffle = function() {
 	for (var i = this.planets.length - 1; i > 0; i -= 1) {
         var j = Math.floor(Math.random() * (i + 1));
         var temp = this.planets[i];
@@ -40,14 +40,52 @@ Matrix.prototype.shuffle = function() {
 }
 
 //Game
+function Game() {
+	this.boardKey = new boardKey();
+	this.boardKey.shuffle();
+	this.turnNumber = 0; //max turns = 40?
+	this.win = undefined;
 
-//Model
+}
+
+Game.prototype.positionPlanets = function() {
+
+
+}
+
+Game.prototype.drawAnons = function() {
+	var group = new THREE.Group();
+	var positionX = -30;
+	var positionZ = -15;
+	for (i=0; i<4; i++) {
+		positionZ += (i*15);
+		for (j=0; j<5; j++) {
+			positionX += (j*15);
+			var anonPlanet = THREEx.Planets.createAnonPlanet();
+			anonPlanet.position.x = positionX;
+			anonPlanet.position.z = positionZ;
+			group.add(anonPlanet);
+			var helper = new THREE.EdgesHelper(anonPlanet, 0x000011);
+			group.add(helper);
+		}
+	}
+	scene.add(group);
+}
+
+Game.prototype.handleTurn = function() {
+
+}
+
+
+//MODEL
+
+var model = new Game();
 
 
 
-//View
+//VIEW
 
-	//Set up scene
+	//set up scene
 		//vars
 var width = window.innerWidth;
 var height = window.innerHeight;
@@ -58,9 +96,20 @@ var renderer = new THREE.WebGLRenderer({
 	});
 	renderer.shadowMap.enabled = true;
 	renderer.setSize(width, height);
+	renderer.setPixelRatio( window.devicePixelRatio );
   	renderer.setClearColor(0x000011, 1);
   	renderer.domElement.id = "context";
   	document.body.appendChild(renderer.domElement);
+
+  	//Window resize
+  	window.addEventListener('resize', onWindowResize, false);
+  	function onWindowResize() {
+
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+	}
 
   		//scene
 var scene = new THREE.Scene();
@@ -83,55 +132,63 @@ scene.add(light);
 		//stars
 scene.add(stars);
 
-//scene.add(anon.mesh);
-scene.add(mercury.mesh);
-
-scene.add(venus.mesh);
-venus.mesh.position.x = 15;
-venus.mesh.position.y = 10;
-
-scene.add(earth.mesh[0], earth.mesh[1]);
-earth.mesh[0].position.x = -15;
-earth.mesh[1].position.x = -15;
-
-scene.add(moon.mesh);
-moon.mesh.position.y = 10;
-moon.mesh.position.x = -10;
-moon.mesh.position.z = -5;
-
-scene.add(mars.mesh);
-mars.mesh.position.z = 15;
-mars.mesh.position.x = -15;
-
-scene.add(jupiter.mesh);
-jupiter.mesh.position.x = 20;
-jupiter.mesh.position.z = 20;
+	//raycaster, mouse vector
+	var raycaster = new THREE.Raycaster();
+	var mouse = new THREE.Vector2();
 
 
-scene.add(saturn.mesh[0], saturn.mesh[1]);
-saturn.mesh[0].position.x = -35;
-saturn.mesh[1].position.x = -35;
+//make board
+model.drawAnons();
 
-scene.add(uranus.mesh[0], uranus.mesh[1]);
-uranus.mesh[0].position.z = 25;
-uranus.mesh[1].position.z = 25;
-uranus.mesh[0].position.x = -35;
-uranus.mesh[1].position.x = -35;
+// //scene.add(anon.mesh);
+// scene.add(mercury.mesh);
 
-scene.add(neptune.mesh);
-neptune.mesh.position.z = 10;
-neptune.mesh.position.x = -50;
+// scene.add(venus.mesh);
+// venus.mesh.position.x = 15;
+// venus.mesh.position.y = 10;
 
-scene.add(pluto.mesh);
-pluto.mesh.position.z = 15;
-pluto.mesh.position.x = 3;
+// scene.add(earth.mesh[0], earth.mesh[1]);
+// earth.mesh[0].position.x = -15;
+// earth.mesh[1].position.x = -15;
 
-scene.add(anon.mesh);
-anon.mesh.position.z = -15;
-anon.mesh.position.y = 10;
+// scene.add(moon.mesh);
+// moon.mesh.position.y = 10;
+// moon.mesh.position.x = -10;
+// moon.mesh.position.z = -5;
 
-var helper = new THREE.EdgesHelper(anon.mesh, 0x000011);
-scene.add(helper);
+// scene.add(mars.mesh);
+// mars.mesh.position.z = 15;
+// mars.mesh.position.x = -15;
+
+// scene.add(jupiter.mesh);
+// jupiter.mesh.position.x = 20;
+// jupiter.mesh.position.z = 20;
+
+
+// scene.add(saturn.mesh[0], saturn.mesh[1]);
+// saturn.mesh[0].position.x = -35;
+// saturn.mesh[1].position.x = -35;
+
+// scene.add(uranus.mesh[0], uranus.mesh[1]);
+// uranus.mesh[0].position.z = 25;
+// uranus.mesh[1].position.z = 25;
+// uranus.mesh[0].position.x = -35;
+// uranus.mesh[1].position.x = -35;
+
+// scene.add(neptune.mesh);
+// neptune.mesh.position.z = 10;
+// neptune.mesh.position.x = -50;
+
+// scene.add(pluto.mesh);
+// pluto.mesh.position.z = 15;
+// pluto.mesh.position.x = 0;
+
+// scene.add(anon.mesh);
+// anon.mesh.position.z = -15;
+// anon.mesh.position.y = 0;
+
+// var helper = new THREE.EdgesHelper(anon.mesh, 0x000011);
+// scene.add(helper);
 
 function animate() {
 	  //animation
@@ -163,7 +220,26 @@ function animate() {
 	  renderer.render(scene, camera);
 	}
 
-//Controller
+//CONTROLLER
+document.addEventListener('click', handleClick, false);
+
+function handleClick (event) {
+	event.preventDefault();
+	mouse.set((event.clientx / width)*2-1, -(event.clienty / height)*2 -1);
+	raycaster.setFromCamera(mouse, camera);
+
+	var intersects = raycaster.intersectObjects();
+
+	//FIRST GENERATE ACTUAL MESHES, THEN STORE IN ARRAY FOR INTERSECT DETECTION
+
+	if (SELECTED) {
+
+	}
+
+
+}
+
+
 function setup() {
 	animate();
 	renderer.render(scene, camera);

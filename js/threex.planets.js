@@ -370,7 +370,7 @@ THREEx.Planets.createStarfield	= function(){
 // }
 
 THREEx.Planets.createAnonPlanet = function(){
-	var geometry = new THREE.IcosahedronGeometry(6, 1);
+	var geometry = new THREE.IcosahedronGeometry(5, 1);
 	var material = new THREE.MeshNormalMaterial({shading: 
 		THREE.FlatShading, 
 		polygonOffset:true, 
