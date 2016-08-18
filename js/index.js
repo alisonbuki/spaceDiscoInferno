@@ -5,7 +5,6 @@ function Planet(name, mesh) {
 	this.mesh = mesh;
 }
 
-
 //Planets data
 var anon = new Planet('?', THREEx.Planets.createAnonPlanet());
 var sun = new Planet('Sun', THREEx.Planets.createSun());
@@ -20,17 +19,31 @@ var uranus = new Planet('Uranus', [THREEx.Planets.createUranus(), THREEx.Planets
 var neptune = new Planet('Neptune', THREEx.Planets.createNeptune());
 var pluto = new Planet('Pluto', THREEx.Planets.createPluto());
 
-var thePlanets = [mercury, venus, earth, moon, mars, jupiter, saturn, uranus, neptune, pluto];
+var anonGroup = new THREE.Group();
+var planetGroup = new THREE.Group();
+
+var thePlanets = [mercury.mesh, 
+				venus.mesh, 
+				earth.mesh, 
+				moon.mesh, 
+				mars.mesh, 
+				jupiter.mesh, 
+				saturn.mesh, 
+				uranus.mesh, 
+				neptune.mesh, 
+				pluto.mesh];
 
 //Starfield
 var stars = THREEx.Planets.createStarfield();
 
 //Board
-function boardKey() {
+function gameBoard(anonGroup, planetGroup) {
 	this.planets = $.merge(thePlanets, thePlanets);
+	this.anonGroup = anonGroup;
+	this.planetGroup = planetGroup;
 }
 
-boardKey.prototype.shuffle = function() {
+gameBoard.prototype.shuffle = function() {
 	for (var i = this.planets.length - 1; i > 0; i -= 1) {
         var j = Math.floor(Math.random() * (i + 1));
         var temp = this.planets[i];
@@ -39,22 +52,7 @@ boardKey.prototype.shuffle = function() {
   }
 }
 
-//Game
-function Game() {
-	this.boardKey = new boardKey();
-	this.boardKey.shuffle();
-	this.turnNumber = 0; //max turns = 40?
-	this.win = undefined;
-
-}
-
-Game.prototype.positionPlanets = function() {
-
-
-}
-
-Game.prototype.drawAnons = function() {
-	var group = new THREE.Group();
+gameBoard.prototype.drawBoard = function() {
 	var x = -45;
 	var z = -33;
 	for (i=0; i<4; i++) {
@@ -65,16 +63,33 @@ Game.prototype.drawAnons = function() {
 			var anonPlanet = THREEx.Planets.createAnonPlanet();
 			anonPlanet.position.x = x;
 			anonPlanet.position.z = z;
-			group.add(anonPlanet);
-			console.log(x, z);
+			anonGroup.add(anonPlanet);
 			var helper = new THREE.EdgesHelper(anonPlanet, 0x000011);
-			group.add(helper);
+			anonGroup.add(helper);
 		}
 	}
-	group.position.x = 0;
-	group.position.z = 0;
-	scene.add(group);
+	anonGroup.position.x = 0;
+	anonGroup.position.z = 0;
+	return anonGroup;
 }
+
+
+gameBoard.prototype.positionPlanets = function() {
+
+
+}
+
+//Game
+function Game() {
+	this.gameBoard = new gameBoard();
+	this.gameBoard.shuffle();
+	this.gameBoard.drawBoard();
+	this.turnNumber = 0; //max turns = 40?
+	this.win = undefined;
+
+}
+
+
 
 Game.prototype.handleTurn = function() {
 
@@ -112,7 +127,6 @@ var renderer = new THREE.WebGLRenderer({
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
-
 	}
 
   		//scene
@@ -137,12 +151,12 @@ scene.add(light);
 scene.add(stars);
 
 	//raycaster, mouse vector
-	var raycaster = new THREE.Raycaster();
-	var mouse = new THREE.Vector2();
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
 
 
 //make board
-model.drawAnons();
+scene.add(anonGroup);
 
 // //scene.add(anon.mesh);
 // scene.add(mercury.mesh);
@@ -197,35 +211,35 @@ model.drawAnons();
 function animate() {
 	  //animation
 	 requestAnimationFrame(animate);
-	  mercury.mesh.rotation.y += 0.003;
-	  mercury.mesh.rotation.x += 0.002;
-	  venus.mesh.rotation.y += 0.003;
-	  venus.mesh.rotation.x += 0.004;
-	  earth.mesh[1].rotation.y += 0.001;
-	  earth.mesh[0].rotation.z += 0.002;
-	  earth.mesh[1].rotation.x += 0.005;
-	  saturn.mesh[0].rotation.x += 0.003;
-	  saturn.mesh[0].rotation.y += 0.001;
-	  mars.mesh.rotation.y += 0.002;
-	  mars.mesh.rotation.x += 0.003;
-	  jupiter.mesh.rotation.y += 0.003;
-	  jupiter.mesh.rotation.x += 0.002;
-	  uranus.mesh[0].rotation.y += 0.002;
-	  uranus.mesh[0].rotation.x += 0.001;
-	  neptune.mesh.rotation.y += 0.002;
-	  neptune.mesh.rotation.x += 0.005;
-	  pluto.mesh.rotation.y += 0.001;
-	  pluto.mesh.rotation.x += 0.004;
-	  anon.mesh.rotation.y += 0.004;
-	  anon.mesh.rotation.x += 0.003;
-
-	  stars.rotation.y += 0.00005;
+	  // mercury.mesh.rotation.y += 0.003;
+	  // mercury.mesh.rotation.x += 0.002;
+	  // venus.mesh.rotation.y += 0.003;
+	  // venus.mesh.rotation.x += 0.004;
+	  // earth.mesh[1].rotation.y += 0.001;
+	  // earth.mesh[0].rotation.z += 0.002;
+	  // earth.mesh[1].rotation.x += 0.005;
+	  // saturn.mesh[0].rotation.x += 0.003;
+	  // saturn.mesh[0].rotation.y += 0.001;
+	  // mars.mesh.rotation.y += 0.002;
+	  // mars.mesh.rotation.x += 0.003;
+	  // jupiter.mesh.rotation.y += 0.003;
+	  // jupiter.mesh.rotation.x += 0.002;
+	  // uranus.mesh[0].rotation.y += 0.002;
+	  // uranus.mesh[0].rotation.x += 0.001;
+	  // neptune.mesh.rotation.y += 0.002;
+	  // neptune.mesh.rotation.x += 0.005;
+	  // pluto.mesh.rotation.y += 0.001;
+	  // pluto.mesh.rotation.x += 0.004;
+	  anonGroup.children.forEach(function(a){
+	  	a.rotation.y += 0.005;
+	  	a.rotation.x += 0.004;
+	  });
+	  stars.rotation.y += 0.00007;
 	  //stars.rotation.x += 0.0008;
 	  renderer.render(scene, camera);
 	}
 
 //CONTROLLER
-document.addEventListener('click', handleClick, false);
 
 function handleClick (event) {
 	event.preventDefault();
@@ -240,13 +254,14 @@ function handleClick (event) {
 
 	}
 
-
 }
 
 
 function setup() {
 	animate();
 	renderer.render(scene, camera);
+
+	document.addEventListener('click', handleClick, false);
 }
 
 $(document).ready(setup);
