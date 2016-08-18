@@ -7,7 +7,7 @@ THREEx.Planets.baseURL	= ''
 // from http://planetpixelemporium.com/
 
 THREEx.Planets.createSun	= function(){
-	var geometry	= new THREE.SphereGeometry(0.5, 32, 32)
+	var geometry	= new THREE.SphereGeometry(50, 150, 150)
 	var texture	= THREE.ImageUtils.loadTexture(THREEx.Planets.baseURL+'images/sunmap.jpg')
 	var material	= new THREE.MeshPhongMaterial({
 		map	: texture,
@@ -19,7 +19,7 @@ THREEx.Planets.createSun	= function(){
 }
 
 THREEx.Planets.createMercury	= function(){
-	var geometry	= new THREE.SphereGeometry(5, 32, 32)
+	var geometry	= new THREE.SphereGeometry(3, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
 		map	: THREE.ImageUtils.loadTexture(THREEx.Planets.baseURL+'images/mercurymap.jpg'),
 		bumpMap	: THREE.ImageUtils.loadTexture(THREEx.Planets.baseURL+'images/mercurybump.jpg'),
@@ -30,7 +30,7 @@ THREEx.Planets.createMercury	= function(){
 }
 
 THREEx.Planets.createVenus	= function(){
-	var geometry	= new THREE.SphereGeometry(5, 32, 32)
+	var geometry	= new THREE.SphereGeometry(4, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
 		map	: THREE.ImageUtils.loadTexture(THREEx.Planets.baseURL+'images/venusmap.jpg'),
 		bumpMap	: THREE.ImageUtils.loadTexture(THREEx.Planets.baseURL+'images/venusbump.jpg'),
@@ -371,11 +371,30 @@ THREEx.Planets.createStarfield	= function(){
 
 THREEx.Planets.createAnonPlanet = function(){
 	var geometry = new THREE.IcosahedronGeometry(4.5, 1);
-	var material = new THREE.MeshNormalMaterial({shading: 
-		THREE.FlatShading, 
+	var material = new THREE.MeshNormalMaterial({
+		//wireframe: true,
+		shading: THREE.FlatShading, 
 		polygonOffset:true, 
 		polygonOffsetFactor:1,
-		polygonOffsetUnits: 1});
+		polygonOffsetUnits: 1
+	});
+	var mesh = new THREE.Mesh(geometry, material);
+	return mesh;
+}
+
+THREEx.Planets.createDiscoBall = function() {
+	var geometry = new THREE.SphereGeometry(11, 15, 12);
+	var material = new THREE.MeshPhongMaterial({
+    emissive: '#222',
+    shininess: 50,
+    reflectivity: 3.5,
+    shading: THREE.FlatShading,
+    specular: 'white',
+    color: 'gray',
+    side: THREE.DoubleSide,
+    envMap: cubeCamera.renderTarget.texture,
+    combine: THREE.AddOperation
+  });
 	var mesh = new THREE.Mesh(geometry, material);
 	return mesh;
 }

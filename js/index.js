@@ -25,10 +25,23 @@ var pluto = new Planet('Pluto', THREEx.Planets.createPluto());
 var anonGroup = new THREE.Group();
 var planetGroup = new THREE.Group();
 
-var saturnGroup = new THREE.Group();
-saturnGroup.add(saturn.mesh[0], saturn.mesh[1]);
+// var saturnGroup = new THREE.Group();
+// saturnGroup.add(saturn.mesh[0], saturn.mesh[1]);
+
+var sunDistance = -185;
+	//sunDistance must have a value between -175 (furthest) and -30 (nearest) to render in scene. 
 
 var thePlanets = [THREEx.Planets.createMercury(), 
+				THREEx.Planets.createVenus(), 
+				[THREEx.Planets.createEarth(), THREEx.Planets.createEarthCloud()], 
+				THREEx.Planets.createMoon(), 
+				THREEx.Planets.createMars(), 
+				THREEx.Planets.createJupiter(), 
+				[THREEx.Planets.createSaturn(), THREEx.Planets.createSaturnRing()], 
+				[THREEx.Planets.createUranus(), THREEx.Planets.createUranusRing()], 
+				THREEx.Planets.createNeptune(), 
+				THREEx.Planets.createPluto(),
+				THREEx.Planets.createMercury(), 
 				THREEx.Planets.createVenus(), 
 				[THREEx.Planets.createEarth(), THREEx.Planets.createEarthCloud()], 
 				THREEx.Planets.createMoon(), 
@@ -43,8 +56,8 @@ var thePlanets = [THREEx.Planets.createMercury(),
 var stars = THREEx.Planets.createStarfield();
 
 //Board
-function gameBoard(anonGroup, planetGroup) {
-	this.planets = $.merge(thePlanets, thePlanets);
+function gameBoard(planets, anonGroup, planetGroup) {
+	this.planets = thePlanets;
 	this.anonGroup = anonGroup;
 	this.planetGroup = planetGroup;
 }
@@ -69,9 +82,11 @@ gameBoard.prototype.drawBoard = function() {
 			var anonPlanet = THREEx.Planets.createAnonPlanet();
 			anonPlanet.position.x = x;
 			anonPlanet.position.z = z;
-			anonGroup.add(anonPlanet);
+			tempGroup = new THREE.Group();
+			tempGroup.add(anonPlanet);
 			var helper = new THREE.EdgesHelper(anonPlanet, 0x000011);
-			anonGroup.add(helper);
+			tempGroup.add(helper);
+			anonGroup.add(tempGroup);
 		}
 	}
 	anonGroup.position.x = 0;
@@ -79,10 +94,38 @@ gameBoard.prototype.drawBoard = function() {
 	return anonGroup;
 }
 
+gameBoard.prototype.drawKey = function() {
+	var x = -45;
+	var z = -33;
+	for (i=0; i<4; i++) {
+		x = -45;
+		z += 15;
+		for (j=0; j<5; j++) {
+			x += 15;
+			var currentPlanet = this.planets.pop();
+	
 
-gameBoard.prototype.positionPlanets = function() {
+			if (currentPlanet.constructor === Array) {
+				tempGroup = new THREE.Group();
+				tempGroup.add(currentPlanet[0], currentPlanet[1]);
+				tempGroup.position.x = x;
+				tempGroup.position.z = z;
+				tempGroup.children[0].rotation.x = 18;
+				//tempGroup.children[0].rotation.y = 210;
+				planetGroup.add(tempGroup);
 
-
+			} else {
+				currentPlanet.position.x = x;
+				currentPlanet.position.z = z;
+				currentPlanet.rotation.x = 18;
+				//currentPlanet.rotation.y = 210;
+				planetGroup.add(currentPlanet);
+			}
+	}
+}
+	planetGroup.position.x = 0;
+	planetGroup.position.z = 0;
+	return planetGroup;
 }
 
 //Game
@@ -90,14 +133,13 @@ function Game() {
 	this.gameBoard = new gameBoard();
 	this.gameBoard.shuffle();
 	this.gameBoard.drawBoard();
-	this.turnNumber = 0; //max turns = 40?
+	this.gameBoard.drawKey();
+	this.turnNumber = 0; //max turns = 40? 
 	this.win = undefined;
 
 }
 
-
-
-Game.prototype.handleTurn = function() {
+Game.prototype.nextTurn = function() {
 
 }
 
@@ -145,6 +187,9 @@ scene.add(camera);
 camera.position.set(0, 90, 0);
 camera.lookAt(scene.position);
 
+		//cubecamera (reflections)
+var cubeCamera = new THREE.CubeCamera(1, 100000, 1024);
+ scene.add(cubeCamera);
 		//lights
 var ambientLight = new THREE.AmbientLight(0xffffff);
   scene.add(ambientLight);
@@ -156,37 +201,28 @@ scene.add(light);
 		//stars
 scene.add(stars);
 
+		//sun
+
+sun.mesh.position.x = -90;
+sun.mesh.position.z = -10;
+sun.mesh.position.y = sunDistance;
+scene.add(sun.mesh)
+
+
+//disco
+var disco = THREEx.Planets.createDiscoBall();
+disco.envMap = cubeCamera.renderTarget.texture;
+disco.rotation.x = 90;
+//scene.add(disco);
+
+
 	//raycaster, mouse vector
 var raycaster = new THREE.Raycaster();
-var mouse = new THREE.Vector2();
+var mouse = new THREE.Vector2(), INTERSECTED;
 
 
 //make board
 scene.add(anonGroup);
-
-// //scene.add(anon.mesh);
-// scene.add(mercury.mesh);
-
-// scene.add(venus.mesh);
-// venus.mesh.position.x = 15;
-// venus.mesh.position.y = 10;
-
-// scene.add(earth.mesh[0], earth.mesh[1]);
-// earth.mesh[0].position.x = -15;
-// earth.mesh[1].position.x = -15;
-
-// scene.add(moon.mesh);
-// moon.mesh.position.y = 10;
-// moon.mesh.position.x = -10;
-// moon.mesh.position.z = -5;
-
-// scene.add(mars.mesh);
-// mars.mesh.position.z = 15;
-// mars.mesh.position.x = -15;
-
-// scene.add(jupiter.mesh);
-// jupiter.mesh.position.x = 20;
-// jupiter.mesh.position.z = 20;
 
 
 //scene.add(saturnGroup);
@@ -194,52 +230,32 @@ scene.add(anonGroup);
 // saturn.mesh[0].position.x = -35;
 // saturn.mesh[1].position.x = -35;
 
-// scene.add(uranus.mesh[0], uranus.mesh[1]);
-// uranus.mesh[0].position.z = 25;
-// uranus.mesh[1].position.z = 25;
-// uranus.mesh[0].position.x = -35;
-// uranus.mesh[1].position.x = -35;
 
-// scene.add(neptune.mesh);
-// neptune.mesh.position.z = 10;
-// neptune.mesh.position.x = -50;
-
-// scene.add(pluto.mesh);
-// pluto.mesh.position.z = 15;
-// pluto.mesh.position.x = 0;
-
-// scene.add(anon.mesh);
-// anon.mesh.position.z = -15;
-// anon.mesh.position.y = 0;
-
-// var helper = new THREE.EdgesHelper(anon.mesh, 0x000011);
-// scene.add(helper);
 
 function animate() {
 	  //animation
 	 requestAnimationFrame(animate);
-	  // mercury.mesh.rotation.y += 0.003;
-	  // mercury.mesh.rotation.x += 0.002;
-	  // venus.mesh.rotation.y += 0.003;
-	  // venus.mesh.rotation.x += 0.004;
-	  // earth.mesh[1].rotation.y += 0.001;
-	  // earth.mesh[0].rotation.z += 0.002;
-	  // earth.mesh[1].rotation.x += 0.005;
-	  // saturn.mesh[0].rotation.x += 0.003;
-	  // saturn.mesh[0].rotation.y += 0.001;
-	  // mars.mesh.rotation.y += 0.002;
-	  // mars.mesh.rotation.x += 0.003;
-	  // jupiter.mesh.rotation.y += 0.003;
-	  // jupiter.mesh.rotation.x += 0.002;
-	  // uranus.mesh[0].rotation.y += 0.002;
-	  // uranus.mesh[0].rotation.x += 0.001;
-	  // neptune.mesh.rotation.y += 0.002;
-	  // neptune.mesh.rotation.x += 0.005;
-	  // pluto.mesh.rotation.y += 0.001;
-	  // pluto.mesh.rotation.x += 0.004;
+	  
+	  sun.mesh.rotation.x += 0.0008
+
+	  disco.rotation.y += 0.004;
+
+	  planetGroup.children.forEach(function(p){
+	  	if (p instanceof THREE.Group) {
+	  		//p.children[0].rotation.x += 0.005;
+	  		p.children[0].rotation.y += 0.002;
+	  	} else {
+	  		//p.rotation.x += 0.004;
+	  		p.rotation.y += 0.003;
+	  	}
+
+	  });
+
 	  anonGroup.children.forEach(function(a){
-	  	a.rotation.y += 0.005;
-	  	a.rotation.x += 0.004;
+	  	a.children[0].rotation.y += 0.005;
+	  	a.children[1].rotation.y += 0.005;
+	  	a.children[0].rotation.x += 0.004;
+	  	a.children[1].rotation.y += 0.004;
 	  });
 	  stars.rotation.y += 0.00007;
 	  //stars.rotation.x += 0.0008;
@@ -248,27 +264,38 @@ function animate() {
 
 //CONTROLLER
 
-function handleClick (event) {
-	event.preventDefault();
-	mouse.set((event.clientx / width)*2-1, -(event.clienty / height)*2 -1);
-	raycaster.setFromCamera(mouse, camera);
-
-	var intersects = raycaster.intersectObjects();
-
-	//FIRST GENERATE ACTUAL MESHES, THEN STORE IN ARRAY FOR INTERSECT DETECTION
-
-	if (SELECTED) {
-
-	}
-
-}
-
-
 function setup() {
 	animate();
 	renderer.render(scene, camera);
 
-	document.addEventListener('click', handleClick, false);
+	window.addEventListener('click', handleTurn, false);
+}
+
+function handleTurn (event) {
+	event.preventDefault();
+	mouse.x = (event.clientX / width) * 2 - 1;
+	mouse.y = -(event.clientY / height) * 2 + 1;
+	//console.log(mouse.x, mouse.y);
+	//mouse.set((event.clientX / width)*2-1, -(event.clientY / height)*2 -1);
+	raycaster.setFromCamera(mouse, camera);
+
+	var intersectsAnon = raycaster.intersectObjects(anonGroup.children, true); 
+	var intersectsPlanet = raycaster.intersectObjects(planetGroup.children, true); 
+
+	if (intersectsAnon.length > 0) {
+		var intersect = intersectsAnon[0];
+
+		console.log(intersect);
+
+	} else if (intersectsPlanet.length > 0) {
+
+	}
+
+
+	// if (SELECTED) {
+
+	// }
+
 }
 
 $(document).ready(setup);
