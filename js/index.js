@@ -225,6 +225,8 @@ var mouse = new THREE.Vector2(), INTERSECTED;
 scene.add(anonGroup);
 
 
+
+
 //scene.add(saturnGroup);
 // scene.add(saturn.mesh[0], saturn.mesh[1]);
 // saturn.mesh[0].position.x = -35;
@@ -283,9 +285,10 @@ function handleTurn (event) {
 	var intersectsPlanet = raycaster.intersectObjects(planetGroup.children, true); 
 
 	if (intersectsAnon.length > 0) {
-		var intersect = intersectsAnon[0];
-
+		var intersect = intersectsAnon[0].object.parent;
 		console.log(intersect);
+		intersect.visible = false;
+
 
 	} else if (intersectsPlanet.length > 0) {
 
