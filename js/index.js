@@ -292,15 +292,24 @@ function handleTurn (event) {
 
 	if (intersectsAnon.length > 0) {
 		var intersect = intersectsAnon[0].object.parent;
-		console.log(intersect);
+		//console.log(intersect);
 		intersect.visible = false;
 
 		var i = anonGroup.children.indexOf(intersect);
 		planetGroup.children[i].visible = true;
-		console.log(i);
+		//console.log(i);
+		sunDistance += 9;
+		sun.mesh.position.y = sunDistance;
+		console.log(sunDistance);
 
 
 	} else if (intersectsPlanet.length > 0) {
+		// var intersect = intersectsPlanet[0].object.parent;
+		// console.log(intersect);
+
+		// var i = planetGroup.children.indexOf(intersect);
+		// //anonGroup.children[i].visible = true;
+		// console.log(i);
 
 	}
 
