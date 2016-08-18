@@ -380,6 +380,12 @@ THREEx.Planets.createAnonPlanet = function(){
 	return mesh;
 }
 
+// THREEx.Planets.createEarthGroup = function(){
+// 	earthGroup = new THREE.Group();
+// 	earthGroup.add(THREEx.Planets.createEarth(), THREEx.Planets.createEarthCloud());
+// 	return earthGroup;
+// }
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //		comment								//

@@ -6,6 +6,7 @@ function Planet(name, mesh) {
 }
 
 //Planets data
+
 var anon = new Planet('?', THREEx.Planets.createAnonPlanet());
 var sun = new Planet('Sun', THREEx.Planets.createSun());
 var mercury = new Planet('Mercury', THREEx.Planets.createMercury());
@@ -19,19 +20,24 @@ var uranus = new Planet('Uranus', [THREEx.Planets.createUranus(), THREEx.Planets
 var neptune = new Planet('Neptune', THREEx.Planets.createNeptune());
 var pluto = new Planet('Pluto', THREEx.Planets.createPluto());
 
+
+//planet groups
 var anonGroup = new THREE.Group();
 var planetGroup = new THREE.Group();
 
-var thePlanets = [mercury.mesh, 
-				venus.mesh, 
-				earth.mesh, 
-				moon.mesh, 
-				mars.mesh, 
-				jupiter.mesh, 
-				saturn.mesh, 
-				uranus.mesh, 
-				neptune.mesh, 
-				pluto.mesh];
+var saturnGroup = new THREE.Group();
+saturnGroup.add(saturn.mesh[0], saturn.mesh[1]);
+
+var thePlanets = [THREEx.Planets.createMercury(), 
+				THREEx.Planets.createVenus(), 
+				[THREEx.Planets.createEarth(), THREEx.Planets.createEarthCloud()], 
+				THREEx.Planets.createMoon(), 
+				THREEx.Planets.createMars(), 
+				THREEx.Planets.createJupiter(), 
+				[THREEx.Planets.createSaturn(), THREEx.Planets.createSaturnRing()], 
+				[THREEx.Planets.createUranus(), THREEx.Planets.createUranusRing()], 
+				THREEx.Planets.createNeptune(), 
+				THREEx.Planets.createPluto()];
 
 //Starfield
 var stars = THREEx.Planets.createStarfield();
@@ -183,6 +189,7 @@ scene.add(anonGroup);
 // jupiter.mesh.position.z = 20;
 
 
+//scene.add(saturnGroup);
 // scene.add(saturn.mesh[0], saturn.mesh[1]);
 // saturn.mesh[0].position.x = -35;
 // saturn.mesh[1].position.x = -35;
