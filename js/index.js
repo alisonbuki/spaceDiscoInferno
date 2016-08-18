@@ -224,6 +224,12 @@ var mouse = new THREE.Vector2(), INTERSECTED;
 //make board
 scene.add(anonGroup);
 
+planetGroup.children.forEach(function(p){
+	p.visible = false;
+});
+
+scene.add(planetGroup);
+
 
 
 
@@ -288,6 +294,10 @@ function handleTurn (event) {
 		var intersect = intersectsAnon[0].object.parent;
 		console.log(intersect);
 		intersect.visible = false;
+
+		var i = anonGroup.children.indexOf(intersect);
+		planetGroup.children[i].visible = true;
+		console.log(i);
 
 
 	} else if (intersectsPlanet.length > 0) {
