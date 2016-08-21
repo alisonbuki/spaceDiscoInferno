@@ -251,7 +251,7 @@ function animate() {
 	  planetGroup.children.forEach(function(p){
 	  	if (p instanceof THREE.Group) {
 	  		//p.children[0].rotation.x += 0.005;
-	  		p.children[0].rotation.y += 0.002;
+	  		p.children[0].rotation.y += 0.003;
 	  	} else {
 	  		//p.rotation.x += 0.004;
 	  		p.rotation.y += 0.003;
@@ -300,16 +300,17 @@ function handleTurn (event) {
 		//console.log(i);
 		sunDistance += 9;
 		sun.mesh.position.y = sunDistance;
-		console.log(sunDistance);
+		//console.log(sunDistance);
 
 
-	} else if (intersectsPlanet.length > 0) {
-		// var intersect = intersectsPlanet[0].object.parent;
-		// console.log(intersect);
+	} 
+	if (intersectsPlanet.length > 0) {
+		var intersect = intersectsPlanet[0].object;
+		//console.log(intersect);
 
-		// var i = planetGroup.children.indexOf(intersect);
-		// //anonGroup.children[i].visible = true;
-		// console.log(i);
+		var i = planetGroup.children.indexOf(intersect);
+		anonGroup.children[i].visible = true;
+		//console.log(i);
 
 	}
 
