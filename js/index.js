@@ -1,32 +1,21 @@
 //Planet
 
-function Planet(name, mesh) {
-	this.name = name;
-	this.mesh = mesh;
-}
+// function Planet(name, mesh) {
+// 	this.name = name;
+// 	this.mesh = mesh;
+// }
 
-//Planets data
+//sun
+var sun = THREEx.Planets.createSun();
 
-var anon = new Planet('?', THREEx.Planets.createAnonPlanet());
-var sun = new Planet('Sun', THREEx.Planets.createSun());
-var mercury = new Planet('Mercury', THREEx.Planets.createMercury());
-var venus = new Planet('Venus', THREEx.Planets.createVenus());
-var earth = new Planet('Earth', [THREEx.Planets.createEarth(), THREEx.Planets.createEarthCloud()]);
-var moon = new Planet('Moon', THREEx.Planets.createMoon());
-var mars = new Planet('Mars', THREEx.Planets.createMars());
-var jupiter = new Planet('Jupiter', THREEx.Planets.createJupiter());
-var saturn = new Planet('Saturn', [THREEx.Planets.createSaturn(), THREEx.Planets.createSaturnRing()]);
-var uranus = new Planet('Uranus', [THREEx.Planets.createUranus(), THREEx.Planets.createUranusRing()]);
-var neptune = new Planet('Neptune', THREEx.Planets.createNeptune());
-var pluto = new Planet('Pluto', THREEx.Planets.createPluto());
+//stars
+var stars = THREEx.Planets.createStarfield();
 
 
 //planet groups
 var anonGroup = new THREE.Group();
 var planetGroup = new THREE.Group();
 
-// var saturnGroup = new THREE.Group();
-// saturnGroup.add(saturn.mesh[0], saturn.mesh[1]);
 
 var sunDistance = -185;
 	//sunDistance must have a value between -175 (furthest) and -30 (nearest) to render in scene. 
@@ -52,8 +41,7 @@ var thePlanets = [THREEx.Planets.createMercury(),
 				THREEx.Planets.createNeptune(), 
 				THREEx.Planets.createPluto()];
 
-//Starfield
-var stars = THREEx.Planets.createStarfield();
+
 
 //Board
 function gameBoard(planets, anonGroup, planetGroup) {
@@ -111,6 +99,7 @@ gameBoard.prototype.drawKey = function() {
 				tempGroup.position.x = x;
 				tempGroup.position.z = z;
 				tempGroup.children[0].rotation.x = 18;
+				tempGroup.visible = false;
 				//tempGroup.children[0].rotation.y = 210;
 				planetGroup.add(tempGroup);
 
@@ -118,6 +107,7 @@ gameBoard.prototype.drawKey = function() {
 				currentPlanet.position.x = x;
 				currentPlanet.position.z = z;
 				currentPlanet.rotation.x = 18;
+				currentPlanet.visible = false;
 				//currentPlanet.rotation.y = 210;
 				planetGroup.add(currentPlanet);
 			}
@@ -133,15 +123,21 @@ function Game() {
 	this.gameBoard = new gameBoard();
 	this.gameBoard.shuffle();
 	this.gameBoard.drawBoard();
-	this.gameBoard.drawKey();
-	this.turnNumber = 0; //max turns = 40? 
+	this.gameBoard.drawKey(); 
 	this.win = undefined;
+	this.state = {
+		turns: 0,
+		matches:0,
+		currentPlanets: []
+	};
 
 }
 
 Game.prototype.nextTurn = function() {
 
 }
+
+
 
 
 //MODEL
@@ -203,10 +199,10 @@ scene.add(stars);
 
 		//sun
 
-sun.mesh.position.x = -90;
-sun.mesh.position.z = -10;
-sun.mesh.position.y = sunDistance;
-scene.add(sun.mesh)
+sun.position.x = -90;
+sun.position.z = -10;
+sun.position.y = sunDistance;
+scene.add(sun)
 
 
 //disco
@@ -224,19 +220,12 @@ var mouse = new THREE.Vector2(), INTERSECTED;
 //make board
 scene.add(anonGroup);
 
-planetGroup.children.forEach(function(p){
-	p.visible = false;
-});
+// planetGroup.children.forEach(function(p){
+// 	p.visible = false;
+// });
 
 scene.add(planetGroup);
 
-
-
-
-//scene.add(saturnGroup);
-// scene.add(saturn.mesh[0], saturn.mesh[1]);
-// saturn.mesh[0].position.x = -35;
-// saturn.mesh[1].position.x = -35;
 
 
 
@@ -244,7 +233,7 @@ function animate() {
 	  //animation
 	 requestAnimationFrame(animate);
 	  
-	  sun.mesh.rotation.x += 0.0008
+	  sun.rotation.x += 0.0008
 
 	  disco.rotation.y += 0.004;
 
@@ -276,10 +265,10 @@ function setup() {
 	animate();
 	renderer.render(scene, camera);
 
-	window.addEventListener('click', handleTurn, false);
+	window.addEventListener('click', handleClick, false);
 }
 
-function handleTurn (event) {
+function handleClick (event) {
 	event.preventDefault();
 	mouse.x = (event.clientX / width) * 2 - 1;
 	mouse.y = -(event.clientY / height) * 2 + 1;
@@ -288,7 +277,7 @@ function handleTurn (event) {
 	raycaster.setFromCamera(mouse, camera);
 
 	var intersectsAnon = raycaster.intersectObjects(anonGroup.children, true); 
-	var intersectsPlanet = raycaster.intersectObjects(planetGroup.children, true); 
+	//var intersectsPlanet = raycaster.intersectObjects(planetGroup.children, true);
 
 	if (intersectsAnon.length > 0) {
 		var intersect = intersectsAnon[0].object.parent;
@@ -298,21 +287,24 @@ function handleTurn (event) {
 		var i = anonGroup.children.indexOf(intersect);
 		planetGroup.children[i].visible = true;
 		//console.log(i);
-		sunDistance += 9;
-		sun.mesh.position.y = sunDistance;
+		sunDistance += 5;
+		sun.position.y = sunDistance;
+
+	
 		//console.log(sunDistance);
 
 
+
 	} 
-	if (intersectsPlanet.length > 0) {
-		var intersect = intersectsPlanet[0].object;
+	//if (intersectsPlanet.length > 0) {
+		// var intersect = intersectsPlanet[0].object;
 		//console.log(intersect);
 
-		var i = planetGroup.children.indexOf(intersect);
-		anonGroup.children[i].visible = true;
+		// var i = planetGroup.children.indexOf(intersect);
+		// anonGroup.children[i].visible = true; //THIS ONLY WORKS SOMETIMES - DEBUG
 		//console.log(i);
 
-	}
+	//}
 
 
 	// if (SELECTED) {
