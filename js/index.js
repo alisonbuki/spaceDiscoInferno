@@ -18,27 +18,27 @@ var planetGroup = new THREE.Group();
 
 
 var sunDistance = -185;
-	//sunDistance must have a value between -175 (furthest) and -30 (nearest) to render in scene. 
+	//sunDistance must have a value between -175 (furthest) and -30 (nearest) to render in scene.
 
-var thePlanets = [THREEx.Planets.createMercury(), 
-				THREEx.Planets.createVenus(), 
-				[THREEx.Planets.createEarth(), THREEx.Planets.createEarthCloud()], 
-				THREEx.Planets.createMoon(), 
-				THREEx.Planets.createMars(), 
-				THREEx.Planets.createJupiter(), 
-				[THREEx.Planets.createSaturn(), THREEx.Planets.createSaturnRing()], 
-				[THREEx.Planets.createUranus(), THREEx.Planets.createUranusRing()], 
-				THREEx.Planets.createNeptune(), 
+var thePlanets = [THREEx.Planets.createMercury(),
+				THREEx.Planets.createVenus(),
+				[THREEx.Planets.createEarth(), THREEx.Planets.createEarthCloud()],
+				THREEx.Planets.createMoon(),
+				THREEx.Planets.createMars(),
+				THREEx.Planets.createJupiter(),
+				[THREEx.Planets.createSaturn(), THREEx.Planets.createSaturnRing()],
+				[THREEx.Planets.createUranus(), THREEx.Planets.createUranusRing()],
+				THREEx.Planets.createNeptune(),
 				THREEx.Planets.createPluto(),
-				THREEx.Planets.createMercury(), 
-				THREEx.Planets.createVenus(), 
-				[THREEx.Planets.createEarth(), THREEx.Planets.createEarthCloud()], 
-				THREEx.Planets.createMoon(), 
-				THREEx.Planets.createMars(), 
-				THREEx.Planets.createJupiter(), 
-				[THREEx.Planets.createSaturn(), THREEx.Planets.createSaturnRing()], 
-				[THREEx.Planets.createUranus(), THREEx.Planets.createUranusRing()], 
-				THREEx.Planets.createNeptune(), 
+				THREEx.Planets.createMercury(),
+				THREEx.Planets.createVenus(),
+				[THREEx.Planets.createEarth(), THREEx.Planets.createEarthCloud()],
+				THREEx.Planets.createMoon(),
+				THREEx.Planets.createMars(),
+				THREEx.Planets.createJupiter(),
+				[THREEx.Planets.createSaturn(), THREEx.Planets.createSaturnRing()],
+				[THREEx.Planets.createUranus(), THREEx.Planets.createUranusRing()],
+				THREEx.Planets.createNeptune(),
 				THREEx.Planets.createPluto()];
 
 
@@ -91,7 +91,7 @@ gameBoard.prototype.drawKey = function() {
 		for (j=0; j<5; j++) {
 			x += 15;
 			var currentPlanet = this.planets.pop();
-	
+
 
 			if (currentPlanet.constructor === Array) {
 				tempGroup = new THREE.Group();
@@ -123,7 +123,7 @@ function Game() {
 	this.gameBoard = new gameBoard();
 	this.gameBoard.shuffle();
 	this.gameBoard.drawBoard();
-	this.gameBoard.drawKey(); 
+	this.gameBoard.drawKey();
 	this.win = undefined;
 	this.state = {
 		turns: 0,
@@ -232,7 +232,7 @@ scene.add(planetGroup);
 function animate() {
 	  //animation
 	 requestAnimationFrame(animate);
-	  
+
 	  sun.rotation.x += 0.0008
 
 	  disco.rotation.y += 0.004;
@@ -276,7 +276,7 @@ function handleClick (event) {
 	//mouse.set((event.clientX / width)*2-1, -(event.clientY / height)*2 -1);
 	raycaster.setFromCamera(mouse, camera);
 
-	var intersectsAnon = raycaster.intersectObjects(anonGroup.children, true); 
+	var intersectsAnon = raycaster.intersectObjects(anonGroup.children, true);
 	//var intersectsPlanet = raycaster.intersectObjects(planetGroup.children, true);
 
 	if (intersectsAnon.length > 0) {
@@ -290,12 +290,12 @@ function handleClick (event) {
 		sunDistance += 5;
 		sun.position.y = sunDistance;
 
-	
+
 		//console.log(sunDistance);
 
 
 
-	} 
+	}
 	//if (intersectsPlanet.length > 0) {
 		// var intersect = intersectsPlanet[0].object;
 		//console.log(intersect);
@@ -314,4 +314,3 @@ function handleClick (event) {
 }
 
 $(document).ready(setup);
-
