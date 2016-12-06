@@ -285,12 +285,13 @@ function handleClick (event) {
 		intersect.visible = false;
 
 		var i = anonGroup.children.indexOf(intersect);
-		planetGroup.children[i].visible = true;
+		var selectedPlanet = planetGroup.children[i];
+		selectedPlanet.visible = true;
+		model.state.currentPlanets.push(selectedPlanet);
+		console.log(model.state.currentPlanets);
 		//console.log(i);
 		sunDistance += 5;
 		sun.position.y = sunDistance;
-
-
 		//console.log(sunDistance);
 
 
