@@ -62,15 +62,15 @@ gameBoard.prototype.shuffle = function() {
 gameBoard.prototype.drawBoard = function() {
 	var x = -45;
 	var z = -33;
-	for (i=0; i<4; i++) {
+	for (var i=0; i<4; i++) {
 		x = -45;
 		z += 15;
-		for (j=0; j<5; j++) {
+		for (var j=0; j<5; j++) {
 			x += 15;
 			var anonPlanet = THREEx.Planets.createAnonPlanet();
 			anonPlanet.position.x = x;
 			anonPlanet.position.z = z;
-			tempGroup = new THREE.Group();
+			var tempGroup = new THREE.Group();
 			tempGroup.add(anonPlanet);
 			var helper = new THREE.EdgesHelper(anonPlanet, 0x000011);
 			tempGroup.add(helper);
@@ -85,16 +85,16 @@ gameBoard.prototype.drawBoard = function() {
 gameBoard.prototype.drawKey = function() {
 	var x = -45;
 	var z = -33;
-	for (i=0; i<4; i++) {
+	for (var i=0; i<4; i++) {
 		x = -45;
 		z += 15;
-		for (j=0; j<5; j++) {
+		for (var j=0; j<5; j++) {
 			x += 15;
 			var currentPlanet = this.planets.pop();
 
 
 			if (currentPlanet.constructor === Array) {
-				tempGroup = new THREE.Group();
+				var tempGroup = new THREE.Group();
 				tempGroup.add(currentPlanet[0], currentPlanet[1]);
 				tempGroup.position.x = x;
 				tempGroup.position.z = z;
